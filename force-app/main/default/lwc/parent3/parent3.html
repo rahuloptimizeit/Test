@@ -1,0 +1,11 @@
+<template>
+    <lightning-card title="Parent-3" icon-name="action:manage_perm_sets">    
+        <p class="slds-text-align_center slds-var-m-vertical_medium">
+          Count: <lightning-formatted-number value={counter}></lightning-formatted-number>
+        </p>
+        <c-child-to-multiple-parent
+        class="slds-show slds-is-relative"
+        onmulti={handleMulti}>
+      </c-child-to-multiple-parent>
+      </lightning-card>
+</template>

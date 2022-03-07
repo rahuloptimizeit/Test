@@ -1,0 +1,42 @@
+<template>
+    <lightning-layout horizontal-align="center">
+        <lightning-layout-item padding="horizontal-small">
+            <lightning-combobox name="carTypes" label="Car Types" placeholder="All Types" value={selectedValue} 
+            onchange={handleCarTypeChange} variant="label-hidden" options={carTypes} ></lightning-combobox>
+        </lightning-layout-item>
+        <lightning-layout-item padding="horizontal-small">
+            <lightning-button label="New" onclick={createNewCarType} ></lightning-button> -->
+             <lightning-card title="Entr the new CAR Type">
+                <div class="slds-box slds-theme_default">  
+                  <div class="slds-var-m-around_small">
+                    <lightning-input type="text" label="New Car Type" onchange={onNameChange}></lightning-input>  
+                    <lightning-input type="file" onchange={onFileUpload} required name="uploadFile" label="Upload File">  
+                    </lightning-input>  
+                  </div>  
+                  <div class="slds-align_absolute-center">    
+                    <lightning-button label="Save" onclick={saveCarType}>  
+                    </lightning-button>  
+                  </div>  
+                </div>
+            </lightning-card> 
+
+            <lightning-card title="Entr the new CAR">
+              <div class="slds-box slds-theme_default">  
+                  <div class="slds-var-m-around_small">
+                    <div >
+                      <lightning-input type="text" label="Name" onchange={onNameChange1}></lightning-input>
+                      <lightning-input type="text" label="Year" onchange={onYearChange}></lightning-input>
+                  </div>
+                    <c-upload-file16feb>
+                        record-id={recordId}
+                        accepted-formats={acceptedFormats}    
+                        soobjdata = {soobjdata}
+                        uploadfilesize={uploadfilesize}>
+                    </c-upload-file16feb> 
+                  </div>
+                  </div>
+            </lightning-card>
+
+        </lightning-layout-item>
+    </lightning-layout>
+</template>

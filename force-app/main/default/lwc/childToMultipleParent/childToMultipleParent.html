@@ -1,0 +1,39 @@
+<template>
+    <lightning-card title="Call From Child" icon-name="action:upload">
+        <select class="slds-select" name = "optionSelect" onchange={changeHandler} >
+            <option value="ADD">Addition</option>
+            <option value="SUB">Subtraction</option>
+            <option value="MUL">Multi</option>
+        </select> 
+        <lightning-layout>
+          <lightning-layout-item flexibility="auto" padding="around-small">
+            <lightning-button
+            id="cont1"
+              label="Subtract"
+              icon-name="utility:dash"
+              onclick={handleSubtract}>
+            </lightning-button>
+          </lightning-layout-item>
+          <lightning-layout-item flexibility="auto" padding="around-small">
+          </lightning-layout-item>
+          <lightning-layout-item flexibility="auto" padding="around-small">
+            <lightning-button
+            id="cont2"
+              label="Add"
+              icon-name="utility:add"
+              onclick={handleAdd}
+              icon-position="right">
+            </lightning-button>
+          </lightning-layout-item>
+          <lightning-layout-item flexibility="auto" padding="around-small">
+            <lightning-button
+            id="cont3"
+              label="Multi"
+              icon-name="utility:dash"
+              onclick={handleMulti}>
+            </lightning-button>
+          </lightning-layout-item>
+         
+        </lightning-layout>
+      </lightning-card>
+</template>

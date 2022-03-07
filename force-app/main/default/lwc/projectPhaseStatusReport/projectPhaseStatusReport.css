@@ -1,0 +1,8 @@
+.progressRingwrap{
+display : inline-block;
+text-align: center;
+margin-right: 20px;
+}
+.progressRingwrap p{
+margin-bottom: 12px;
+}

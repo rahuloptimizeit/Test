@@ -1,0 +1,14 @@
+<template>
+    <lightning-card title="Grand Parent" icon-name="action:download">
+        <div class="slds-var-p-vertical_xx-small">
+            <h1>
+                This is Grand Parent LWC Container : {valueFromGrandChild} 
+            </h1>
+            <c-bubble-parent oninputtext={handleClickEventP}>
+                <div>
+                    XYZ
+                </div>
+            </c-bubble-parent>
+            </div>
+        </lightning-card>
+</template>

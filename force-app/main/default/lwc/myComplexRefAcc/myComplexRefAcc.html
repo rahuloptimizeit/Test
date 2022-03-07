@@ -1,0 +1,66 @@
+<template> 
+    <lightning-card title="Account Detailes">
+        <div class="c-container">
+            <lightning-layout horizontal-align="space">
+                <lightning-layout-item padding="around-small">
+                    <div class="custom-box">
+                        <div class="custom-box">
+                            
+                            <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                                <tr>
+                                    <td><b>Account Name</b></td>
+                                    
+                                </tr>
+                                <template for:each={Accountss.data} for:item="acc">
+                                    <tr key={acc.Id}>
+                                        <td>
+                                             <a onclick={handleAccount} name="block" id={acc.Id} data-id={acc.Id}>{acc.Name}</a> 
+                                        </td>
+                                    </tr>
+                                </template>
+                            </table>
+                            <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                                <td><b>Opp Name</b></td>
+                                <template for:each={getopp.data} for:item="opps">
+                                    <tr key={opps.Id}>
+                                        <td>
+                                            {opps.Name}
+                                        </td>
+                                    </tr>
+                                </template>
+                            </table>
+                        
+                        </div>
+                    </div>
+                </lightning-layout-item>
+                <lightning-layout-item padding="around-small" class="slds-var-m-around_x-small" >
+                    <div class="custom-box">
+                        <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                            <tr>
+                                <td><b>Name</b></td>
+                                <td><b>Stage Name</b></td>
+                                <td><b>Action</b></td>
+                            </tr>
+                            <template for:each={Oppor.data} for:item="opp">
+                                <tr key={opp.Id}>
+                                    <td>
+                                        {opp.Name}
+                                    </td>
+                                    <td>
+                                        {opp.StageName}
+                                    </td>
+                                    <td>
+                                        <lightning-button label="update"  variant="brand" value={opp.Id} onclick={handleUpdate}>
+                                        </lightning-button>
+                                    </td>
+                                </tr>
+                            </template>
+                        </table>
+                    </div>
+                </lightning-layout-item>
+            </lightning-layout>
+        </div>
+        
+    </lightning-card> 
+    
+</template>

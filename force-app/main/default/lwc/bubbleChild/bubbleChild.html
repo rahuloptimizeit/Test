@@ -1,0 +1,18 @@
+<template>
+    <lightning-card title="Child" icon-name="action:download">
+        <lightning-layout>
+          <lightning-layout-item flexibility="auto" padding="around-small">
+    <div class="slds-var-p-vertical_xx-small">
+        <h2>
+            This is Child LWC
+        </h2>
+        Add the value to box : <input class="slds-var-p-vertical_xx-small" id="txtBoxId" type="text" name ="rahul" onchange={handleChange}>
+        <button class="slds-button slds-button_natural" name="show value to parent" onclick={handleclick}>
+        show value to parent
+    </button>
+    
+    </div>
+</lightning-layout-item>
+</lightning-layout>
+</lightning-card>
+</template>

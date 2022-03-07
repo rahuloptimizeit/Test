@@ -1,0 +1,121 @@
+<template>
+	<div class={flexipageRegionWidth}>
+	<lightning-card title="Account Details">
+        <div class="c-container">
+            <lightning-layout horizontal-align="space">
+                <lightning-layout-item padding="around-small">
+                    <div class="custom-box">
+                        <div class="custom-box">
+							<table width="100%" border="0" cellspacing="0" cellpadding="0" class="slds-table slds-table_cell-buffer slds-table_bordered">
+                                <tr>
+                                    <td><b>Account Name</b></td>
+									<td><b> Updated Opportunity Name</b></td>
+                                </tr>
+                                <template for:each={Accountss.data} for:item="acc">
+                                    <tr key={acc.Id}>
+                                        <td>
+                                             <a onclick={handleAccount} name="block" id={acc.Id} data-id={acc.Id}>{acc.Name}</a> 
+                                        </td>
+										<td>
+											{acc.RecentOpp__c}
+									   </td>
+                                    </tr>
+                                </template>
+								<!-- <template for:each={getopp.data} for:item="opps">
+									<tr key={opps.Id}>
+										<td>
+											{opps.Name}
+										</td>
+									</tr>
+								</template> -->
+                            </table>
+						</div>
+                    </div>
+                </lightning-layout-item>
+				<lightning-layout-item padding="around-small" class="slds-var-m-around_x-small" >
+                    <div class="custom-box">
+	<table width="100%" border="0" cellspacing="0" cellpadding="0" class="slds-table slds-table_cell-buffer slds-table_bordered">
+		<tr>
+			<td><b>Name</b></td>
+            <td><b>ToggleTest</b></td>
+            <td><b>ActualDate</b></td>
+			<!-- <td><b>StageName</b></td> -->
+            <td><b>New Functionality</b></td>
+            <!-- <td><b>Probability</b></td>
+            <td><b>LeadSource</b></td> -->
+            <td><b>CloseDate</b></td>
+            <td><b>IsPrivate</b></td>
+			<td><b>Action</b></td>
+		</tr>
+		<template for:each={opps.data} for:item="opp" for:index="index">
+			<tr class=".highlight" key={opp.Id} id={opp.Id}>
+				<!-- <tr key={opp.Id} > -->
+					<!-- data-target-id={opp.ID} -->
+				<td>
+						{opp.Name}		
+				</td>
+                <!-- Special edition -->
+                <td>
+				<template if:true={opp.IsPrivate}>
+                    <!-- <lightning-button variant="inverse" label="true" data-id={opp.Id} value="True" title="Download action"  onclick={fortrue}></lightning-button>    
+                    <lightning-button variant="inverse"  label="false" data-id={opp.Id} value="False" title="Download action"  onclick={forfalse}></lightning-button> -->
+					<button data-id={opp.Id} value="True" style="background-color:rgb(0, 255, 42)" title="Download action"  onclick={fortrue}>true</button>   
+				</template> 
+				<template if:false={opp.IsPrivate}>
+                    <button data-id={opp.Id} value="False" style="background-color:red" title="" onclick={forfalse}>false </button>
+				</template> 
+					<!-- <button data-id={opp.Id} value="Toggle Button" style="color:skyblue" title=""  onclick={fortest}> Toggle Button </button> 	 -->
+        		</td>
+                <td>
+					<lightning-input type="date" name="actualDate" data-id={opp.Id} value={opp.actualDate} onchange={actualDateChange}></lightning-input>
+				</td>
+                 <!-- Special edition -->
+				<!-- <td>
+					{opp.StageName}
+				</td> -->
+                <td>
+					<template if:true={opp.IsPrivate}>
+					 <button name ="buttontrue" data-id={opp.Id} style="background-color:green" value="True" title="Download action"  data-index={index} onclick={fortrue1}>True</button>    
+                     <button name ="buttonfalse" data-id={opp.Id} style="background-color:white" value="False" title="Download action" data-index={index} onclick={fortrue2}>False</button>
+					</template>
+					<template if:false={opp.IsPrivate}>
+					 <button name ="buttontrue" data-id={opp.Id} style="background-color:white" value="True" title="Download action"  data-index={index} onclick={fortrue1}>True</button>    
+                     <button name ="buttonfalse" data-id={opp.Id} style="background-color:red" value="False" title="Download action" data-index={index} onclick={fortrue2}>False</button>
+					</template>
+				</td>
+                <!-- <td>
+					{opp.Probability}
+				</td>
+                <td>
+					{opp.LeadSource}
+				</td> -->
+                <td>
+					{opp.CloseDate}
+				</td>
+                <td>
+					{opp.IsPrivate}
+				</td>
+				<td>
+					<lightning-button label="update"  variant="brand" value={opp.Id} onclick={handleUpdate}>
+					</lightning-button>
+				</td>
+			</tr>
+		</template>
+	</table>
+	<table class="slds-table slds-table_cell-buffer slds-table_bordered">
+		<td><b> Updated Opportunity Name</b></td>
+		<template for:each={getopp.data} for:item="opps">
+			<tr key={opps.Id}>
+				<td>
+					{opps.Name}  FROM ACCOUNT {opps.Account.Name}
+				</td>
+			</tr>
+		</template>
+	</table>
+</div>
+</lightning-layout-item>
+</lightning-layout>
+</div>
+</lightning-card> 
+</div>
+</template>

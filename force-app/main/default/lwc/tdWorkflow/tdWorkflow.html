@@ -1,0 +1,284 @@
+<template>
+    <div class="spinner">
+        <template if:true={isLoading}>
+             <lightning-spinner alternative-text="Loading" variant="brand" size="large">
+             </lightning-spinner>
+        </template>
+    </div>
+    <lightning-card icon-name="standard:work_plan" class="slds-text-heading_large">
+        <h4 slot="title" class="page-header">Tenancy Delivery Workflow</h4>
+        <div class="div-top">
+            <div class="slds-tabs_default">
+                <template if:true={tdWorkflow}>
+                    <ul class="slds-tabs_default__nav" role="tablist">
+                        <template for:each={phases} for:item="tab">
+                            <li key={tab.tdWorkflowId} class={tab.cssClass} title={tab.label} role="presentation" onclick={handlePhaseTab}> 
+                                <a class="slds-tabs_default__link" href="javascript:void(0);" role="tab" tabindex="0" aria-selected="true" aria-controls={tab.label} data-id={tab.label} id={tab.tdWorkflowId} data-phaseid={tab.tdWorkflowId} style="height:100%!important;">
+                                <span>{tab.label}</span><br/>  
+                                <span>
+                                    <template for:each={tab.phaseStats} for:item="st">
+                                        <span key={st.completed} class="slds-badge gray" title="Completed">{st.completed}</span>
+                                        <span key={st.red} class="slds-badge red" title="Overdue">{st.red}</span>
+                                        <span key={st.orange} class="slds-badge orange" title="Due Soon">{st.orange}</span>
+                                        <span key={st.green} class="slds-badge green" title="In future(14 days)">{st.green}</span>
+                                        <span key={st.blue} class="slds-badge blue" title="open">{st.blue}</span>
+                                    </template>
+                                </span>                                
+                            </a> </li>
+                        </template>
+                    </ul>
+                    <template for:each={phases} for:item="tab">
+                        <div key={tab.label} id={tab.label} data-id={tab.label} data-container={tab.label} class="slds-tabs_default__content slds-hide" role="tabpanel" aria-labelledby={tab.tdWorkflowId}>
+                            <div class="slds-vertical-tabs">
+                                <ul class="slds-vertical-tabs__nav" role="tablist" aria-orientation="vertical">
+                                    <template for:each={phaseTasks} for:item="tdf"><!--"slds-vertical-tabs__nav-item"-->
+                                        <li key={tdf.taskId} class={tdf.cssClass} title={tdf.taskName} role="presentation" onclick={handleTaskTab}>
+                                            <span class={tdf.cssClassHighlight}>&nbsp;</span>
+                                            <a class="slds-vertical-tabs__link" href="#" role="tab" tabindex="0" aria-selected="true" aria-controls={tdf.taskName} data-id={tdf.taskId} id={tdf.taskId}>
+                                              <span class="slds-truncate" title={tdf.taskName}>{tdf.taskName}</span>
+                                              <span class="slds-vertical-tabs__right-icon slds-hide">
+                                                <span class="slds-badge slds-badge_inverse">{tdf.status}</span>
+                                              </span>
+                                            </a>    
+                                          </li>
+                                    </template>
+                                </ul>
+                                <template for:each={phaseTasks} for:item="tdf">
+                                    <div key={tdf.taskId} class="slds-vertical-tabs__content slds-hide" id={tdf.taskName} data-container={tdf.taskId} role="tabpanel" aria-labelledby={tdf.taskId}>
+                                        <table class="slds-table slds-table--bordered slds-border_left slds-border_right">
+                                            <tr>
+                                                <td width="15%" style="vertical-align:top;">
+                                                    <lightning-card title="Task Detail" icon-name="standard:procedure_detail">
+                                                        <div class="slds">
+                                                            <table class="slds-table slds-table--bordered slds-border_left slds-border_right">
+                                                                <thead>
+                                                                    <tr class="slds-text-heading--label">
+                                                                        <!--<th>Start Date</th>
+                                                                        <td>{tdf.startDate}</td>-->
+                                                                        <th>Task Link</th>
+                                                                        <td><!--{tdf.plannedDate}-->
+                                                                            <a href="javascript:void(0);" data-taskid={tdf.taskId} onclick={handleTaskLinkClick}>Click Here</a>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr class="slds-text-heading--label">
+                                                                        <!--<th>Start Date</th>
+                                                                        <td>{tdf.startDate}</td>-->
+                                                                        <th>Planned Date</th>
+                                                                        <td><!--{tdf.plannedDate}-->
+                                                                            <lightning-formatted-date-time
+                                                                                value={tdf.plannedDate} year="numeric" day="2-digit" month="long">
+                                                                            </lightning-formatted-date-time>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr class="slds-text-heading--label">
+                                                                        <th>Actual Date</th>
+                                                                        <td><!--{tdf.actualDate}-->
+                                                                            <!--<lightning-formatted-date-time
+                                                                                value={tdf.actualDate} year="numeric" day="2-digit" month="long">
+                                                                            </lightning-formatted-date-time>-->
+                                                                            <lightning-input type="date" name="actualDate" data-id={tdf.taskId} value={tdf.actualDate} onchange={actualDateChange}></lightning-input>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr class="slds-text-heading--label">
+                                                                        <th>Status</th>
+                                                                        <td>{tdf.status}</td>
+                                                                    </tr>
+                                                                    <tr class="slds-text-heading--label">
+                                                                        <th>Task Owner</th>
+                                                                        <td>{tdf.taskOwner}</td>
+                                                                    </tr>  
+                                                                    <tr class="slds-text-heading--label">
+                                                                        <td colspan="2"><b>Notes</b>
+                                                                            <div style="max-height: 150px;overflow: auto;">
+                                                                                <lightning-formatted-rich-text
+                                                                                    value={tdf.notes}
+                                                                                ></lightning-formatted-rich-text>
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>                                                                    
+                                                                    <tr class="slds-text-heading--label">
+                                                                        <td colspan="2">
+                                                                            <lightning-textarea data-noteid={tdf.taskId} data-value={tdf.notes} name="txtTaskNote" label="Add Note" placeholder="type here..."></lightning-textarea>
+                                                                            <div style="float: right;">
+                                                                            <lightning-button data-id={tdf.taskId} variant="brand" label="Save" title="Save note" onclick={handleSaveTaskNote} class="slds-m-left_x-small"></lightning-button></div>
+                                                                        </td>
+                                                                    </tr>    
+                                                                </thead>
+                                                            </table>
+                                                        </div>
+                                                    </lightning-card>
+                                                </td>
+                                                <td style="vertical-align:top;">
+                                                    <lightning-card title="Checklist" icon-name="standard:task">
+                                                        <table class="slds-table slds-table_bordered slds-border_left slds-border_right slds-m-right_medium">
+                                                            <template for:each={taskChecklist} for:item="chk">
+                                                                <tr key={chk.CheckId}>
+                                                                    <th data-label="Name" scope="row" style="width:35%;">
+                                                                        {chk.CheckLabel}
+                                                                    </th>
+                                                                    <td data-label="Some Custom Column">
+                                                                        <div class="demo-only">
+                                                                            <fieldset class="slds-form-element">
+                                                                                <div class="slds-form-element__control">
+                                                                                    <div class="slds-button-group" role="group" style="padding:0.5rem;">
+                                                                                        <template for:each={chk.CheckOptions} for:item="opt">
+                                                                                            <template if:true={opt.isSelected}>
+                                                                                                <button key={opt.option} id={opt.option} value={chk.CheckId} onclick={handleCheckOptionClick} class="slds-button slds-button_inverse selected">{opt.option}</button>
+                                                                                            </template>
+                                                                                            <template if:false={opt.isSelected}>
+                                                                                                <button key={opt.option} id={opt.option} value={chk.CheckId} onclick={handleCheckOptionClick} class="slds-button slds-button_inverse">{opt.option}</button>
+                                                                                            </template>
+                                                                                        </template>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </fieldset>
+                                                                          </div>
+                                                                    </td>
+                                                                    <td>
+                                                                        <template if:true={chk.icCheckChecked}>
+                                                                            <b>Checked by</b> {chk.lastModifiedBy} on <!--{chk.lastModifiedDate}--><lightning-formatted-date-time
+                                                                            value={chk.lastModifiedDate} year="numeric" day="2-digit" month="long">
+                                                                        </lightning-formatted-date-time>
+                                                                        </template>
+                                                                        <template if:false={chk.icCheckChecked}>
+                                                                            <template if:true={chk.isEscalation}>
+                                                                                Will be <b>escalated</b> to {chk.ecsalationTo} on <!--{chk.escalationDate}--><lightning-formatted-date-time
+                                                                                value={chk.escalationDate} year="numeric" day="2-digit" month="long">
+                                                                            </lightning-formatted-date-time>
+                                                                            </template>
+                                                                        </template>
+                                                                    </td>
+                                                                </tr>
+                                                            </template>
+                                                        </table>
+                                                    </lightning-card>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </template>                            
+                            </div>
+                        </div>
+                    </template>
+                </template>
+            </div>
+            <!--<div class="slds-tabs_default">
+                <ul class="slds-tabs_default__nav" role="tablist">
+                    <li class="slds-tabs_default__item slds-is-active" title="Item One" role="presentation" onclick={handlePhaseTab}> <a class="slds-tabs_default__link" href="javascript:void(0);" role="tab" tabindex="0" aria-selected="true" aria-controls="tab-default-1" id="tab-default-1__item">Tab Label  <span class="slds-badge slds-theme_error">10</span></a> </li>
+                    <li class="slds-tabs_default__item completed" title="Item Two" role="presentation" onclick={handlePhaseTab}> <a class="slds-tabs_default__link" href="javascript:void(0);" role="tab" tabindex="-1" aria-selected="false" aria-controls="tab-default-2" id="tab-default-2__item">Tab two <span class="slds-badge slds-theme_success">3</span></a> </li>
+                    <li class="slds-tabs_default__item" title="Item Three" role="presentation" onclick={handlePhaseTab}> <a class="slds-tabs_default__link" href="javascript:void(0);" role="tab" tabindex="-1" aria-selected="false" aria-controls="tab-default-3" id="tab-default-3__item">Item Three</a> </li>
+                </ul>
+                <div id="tab-default-1" data-id="tab-default-1" class="slds-tabs_default__content slds-show" role="tabpanel" aria-labelledby="tab-default-1__item">Item One Content</div>
+                <div id="tab-default-2" data-id="tab-default-2" class="slds-tabs_default__content slds-hide" role="tabpanel" aria-labelledby="tab-default-2__item">Item Two Content</div>
+                <div id="tab-default-3" data-id="tab-default-3" class="slds-tabs_default__content slds-hide" role="tabpanel" aria-labelledby="tab-default-3__item">Item Three Content</div>
+            </div>-->
+            <br/><br/><br/><br/>
+            <template if:true={tdWorkflow}>
+                <div class="list-view-tabset slds-hide">
+                    <lightning-tabset active-tab-value="">
+                        <template for:each={phases} for:item="tab">
+                            <lightning-tab label={tab.label} key={tab.tdWorkflowId} value={tab.tdWorkflowId} onactive={handleActive}>
+                                <lightning-tabset variant="vertical" active-tab-value={selectedTaskId}>
+                                    <template for:each={phaseTasks} for:item="tdf">  
+                                        <lightning-tab label={tdf.taskName} key={tdf.taskId} value={tdf.taskId} style="width:100%;" onactive={handleActiveChild} class='Completed'>
+                                            <template if:true={taskChecklist}>
+                                                <lightning-card title="Task Detail" icon-name="standard:procedure_detail">
+                                                    <div class="slds">
+                                                        <table class="slds-table slds-table--bordered">
+                                                            <thead>
+                                                                <tr class="slds-text-heading--label">
+                                                                    <th>Start Date</th>
+                                                                    <td>{tdf.startDate}</td>
+                                                                    <th>Planned Date</th>
+                                                                    <td>{tdf.plannedDate}</td>
+                                                                    <th>Status</th>
+                                                                    <td>{tdf.status}</td>
+                                                                    <th>Actual Date</th>
+                                                                    <td>{tdf.actualDate}</td>
+                                                                </tr>                                                            
+                                                            </thead>
+                                                        </table>
+                                                    </div>
+                                                </lightning-card>
+                                                <lightning-card title="Checklist" icon-name="standard:task">
+                                                    <table class="slds-table slds-table_bordered slds-border_left slds-border_right slds-m-left_medium slds-m-right_medium">
+                                                        <template for:each={taskChecklist} for:item="chk">
+                                                            <tr key={chk.CheckId}>
+                                                                <th data-label="Name" scope="row" style="width:35%;">
+                                                                    {chk.CheckLabel}
+                                                                </th>
+                                                                <td data-label="Some Custom Column">
+                                                                    <div class="demo-only">
+                                                                        <fieldset class="slds-form-element">
+                                                                            <div class="slds-form-element__control">
+                                                                                <div class="slds-button-group" role="group" style="padding:0.5rem;">
+                                                                                    <template for:each={chk.CheckOptions} for:item="opt">
+                                                                                        <template if:true={opt.isSelected}>
+                                                                                            <button key={opt.option} id={opt.option} value={chk.CheckId} onclick={handleCheckOptionClick} class="slds-button slds-button_inverse selected">{opt.option}</button>
+                                                                                        </template>
+                                                                                        <template if:false={opt.isSelected}>
+                                                                                            <button key={opt.option} id={opt.option} value={chk.CheckId} onclick={handleCheckOptionClick} class="slds-button slds-button_inverse">{opt.option}</button>
+                                                                                        </template>
+                                                                                    </template>
+                                                                                </div>
+                                                                            </div>
+                                                                        </fieldset>
+                                                                      </div>
+                                                                    <!--<div class="demo-only slds-hide">
+                                                                        <div class="slds-button-group" role="group" style="padding:0.5rem;background:#16325c">
+                                                                            <template for:each={chk.CheckOptions} for:item="opt">
+                                                                                <template if:true={chk.isDisabled}>
+                                                                                    <template if:true={opt.isSelected}>
+                                                                                        <button disabled="" key={opt.option} id={opt.option} value={chk.CheckId} onclick={handleCheckOptionClick} class="slds-button slds-button_inverse color_white">{opt.option}</button>
+                                                                                    </template>
+                                                                                    <template if:false={opt.isSelected}>
+                                                                                        <button disabled="" key={opt.option} id={opt.option} value={chk.CheckId} onclick={handleCheckOptionClick} class="slds-button slds-button_inverse">{opt.option}</button>
+                                                                                    </template>
+                                                                                </template>
+                                                                                <template if:false={chk.isDisabled}>
+                                                                                    <button key={opt.option} id={opt.option} value={chk.CheckId} onclick={handleCheckOptionClick} class="slds-button slds-button_inverse">{opt.option}</button>
+                                                                                </template>
+                                                                            </template>
+                                                                        </div>
+                                                                      </div>-->
+                                                                      <!--<fieldset class="slds-form-element">
+                                                                        <div class="slds-form-element__control">
+                                                                          <div class="slds-radio_button-group">
+                                                                            <template for:each={chk.CheckOptions} for:item="opt">
+                                                                                <template if:true={opt.isSelected}>
+                                                                                    <span key={opt.option} class="slds-button slds-radio_button">
+                                                                                        <input type="radio" name={chk.CheckId} id={opt.option} value={chk.CheckId} onchange={handleCheckOptionClick} />
+                                                                                        <label class="slds-radio_button__label selected" for={opt.option}>
+                                                                                          <span class="slds-radio_faux">{opt.option}</span>
+                                                                                        </label>
+                                                                                      </span>
+                                                                                </template>
+                                                                                <template if:false={opt.isSelected}>
+                                                                                    <span key={opt.option} class="slds-button slds-radio_button">
+                                                                                        <input type="radio" name={chk.CheckId} id={opt.option} value={chk.CheckId} onchange={handleCheckOptionClick} />
+                                                                                        <label class="slds-radio_button__label" for={opt.option}>
+                                                                                          <span class="slds-radio_faux">{opt.option}</span>
+                                                                                        </label>
+                                                                                      </span>
+                                                                                </template>
+                                                                            </template>
+                                                                          </div>
+                                                                        </div>
+                                                                      </fieldset>-->
+                                                                </td>
+                                                            </tr>
+                                                        </template>
+                                                    </table>
+                                                </lightning-card>
+                                            </template>
+                                        </lightning-tab>
+                                    </template>
+                            </lightning-tabset>
+                            </lightning-tab>
+                        </template>
+                    </lightning-tabset>
+                </div>
+            </template>
+        </div>
+	</lightning-card>
+</template>

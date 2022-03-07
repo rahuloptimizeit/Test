@@ -1,0 +1,12 @@
+<template>
+    <lightning-card title="Parent" icon-name="action:download">
+
+  
+    <div class="slds-var-p-vertical_xx-small">
+        <h1>
+            This is Parent LWC Container : {valueFromChild} 
+        </h1>
+        <c-bubble-child oninputtext={handleClickEvent}> </c-bubble-child>
+        </div>
+    </lightning-card>
+</template>
